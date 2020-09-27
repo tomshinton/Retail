@@ -7,9 +7,12 @@
 
 #include "RetailGameModeBase.generated.h"
 
-UCLASS()
+UCLASS(Blueprintable)
 class ARetailGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+public:
+
+	ARetailGameModeBase();
 };
