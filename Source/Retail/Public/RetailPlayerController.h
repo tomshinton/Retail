@@ -12,4 +12,13 @@ class ARetailPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
+public:
+
+	ARetailPlayerController(const FObjectInitializer& ObjectInitializer);
+
+protected:
+
+	//AActor
+	void BeginPlay() override;
+	//~AActor
 };
