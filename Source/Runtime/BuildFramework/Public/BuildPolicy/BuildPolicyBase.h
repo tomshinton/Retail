@@ -25,6 +25,12 @@ public:
 		, CurrLoc(FVector::ZeroVector)
 		, ProjectionInterface()
 		, GridSettings(GetDefault<UGridProjectionSettings>())
+		, GeneratedPoints()
+		, Diff(FVector::ZeroVector)
+		, DiffUnit(FVector::ZeroVector)
+		, GridCellSize(GridSettings->GridCellSize)
+		, XDir(0)
+		, YDir(0)
 	{};
 
 	void Start()
@@ -35,27 +41,13 @@ public:
 
 			Interface->GetOnRoundedPositionChanged().AddWeakLambda(this, [this](const FVector& InNewLoc, const FVector& InOldLoc)
 			{
-				CurrLoc = InNewLoc;
-				GeneratedPoints = GeneratePoints();
-
-#if !UE_BUILD_SHIPPING
-				if (UWorld* World = GetWorld())
-				{
-					if (DrawBuildPolicyPoints.GetValueOnAnyThread())
-					{
-						FlushPersistentDebugLines(World);
-
-						for (const FVector& Point : GeneratedPoints)
-						{
-							DrawDebugSphere(World, Point, static_cast<float>(GridSettings->GridCellSize) * 0.5f, 12, FColor::White, true);
-						}
-					}
-				}
-#endif //!UE_BUILD_SHIPPING
+				OnRoundedPositionChanged(InNewLoc);
 			});
 
 			StartLoc = Interface->GetRoundedPositionUnderMouse();
 			CurrLoc = StartLoc;
+
+			GeneratePoints(GeneratedPoints);
 		}
 	}
 
@@ -66,8 +58,40 @@ public:
 			ProjectionInterface->GetOnRoundedPositionChanged().RemoveAll(this);
 		}
 	}
+
+	void OnRoundedPositionChanged(const FVector& InNewLocation)
+	{
+		GeneratedPoints.Empty();
+
+		CurrLoc = InNewLocation;
+
+		Diff = StartLoc - CurrLoc;
+		GridCellSize = GridSettings->GridCellSize;
+
+		DiffUnit = FVector::Abs(Diff / GridCellSize);
+
+		XDir = FMath::Sign(Diff.X);
+		YDir = FMath::Sign(Diff.Y);
+
+		GeneratePoints(GeneratedPoints);
+
+#if !UE_BUILD_SHIPPING
+		if (UWorld* World = GetWorld())
+		{
+			if (DrawBuildPolicyPoints.GetValueOnAnyThread())
+			{
+				FlushPersistentDebugLines(World);
+
+				for (const FVector& Point : GeneratedPoints)
+				{
+					DrawDebugSphere(World, Point, static_cast<float>(GridSettings->GridCellSize) * 0.5f, 12, FColor::White, true);
+				}
+			}
+		}
+#endif //!UE_BUILD_SHIPPING
+	}
 	
-	virtual TArray<FVector> GeneratePoints() const PURE_VIRTUAL(UBuildPolicyBase::GeneratePoints, return TArray<FVector>(););
+	virtual void GeneratePoints(TArray<FVector>& OutGeneratedPoints) const PURE_VIRTUAL(UBuildPolicyBase::GeneratePoints, );
 
 protected:
 
@@ -80,4 +104,12 @@ protected:
 	const UGridProjectionSettings* GridSettings;
 
 	TArray<FVector> GeneratedPoints;
+
+	FVector Diff;
+	FVector DiffUnit;
+
+	uint16 GridCellSize;
+
+	int16 XDir;
+	int16 YDir;
 };

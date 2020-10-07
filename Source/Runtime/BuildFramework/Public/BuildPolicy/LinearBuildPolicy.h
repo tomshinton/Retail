@@ -2,8 +2,6 @@
 
 #include "Runtime/BuildFramework/Public/BuildPolicy/BuildPolicyBase.h"
 
-#include <Runtime/Engine/Public/DrawDebugHelpers.h>
-
 #include "LinearBuildPolicy.generated.h"
 
 UCLASS()
@@ -16,59 +14,41 @@ public:
 	ULinearBuildPolicy()
 	{};
 
-
-	virtual TArray<FVector> GeneratePoints() const override
+	virtual void GeneratePoints(TArray<FVector>& OutGeneratedPoints) const override
 	{
-		if (UWorld* World = GetWorld())
+		if (DiffUnit.X > DiffUnit.Y)
 		{
-			TArray<FVector> NewPoints;
-
-			const FVector Diff = StartLoc - CurrLoc;
-			const uint16 GridCellSize = GridSettings->GridCellSize;
-
-			const FVector DiffUnit = FVector::Abs(Diff / GridCellSize);
-
-			const int8 XDir = FMath::Sign(Diff.X);
-			const int8 YDir = FMath::Sign(Diff.Y);
-
-			if (DiffUnit.X > DiffUnit.Y)
+			//Primary direction
+			for (uint8 x = 0; x <= DiffUnit.X; x++)
 			{
-				//Primary direction
-				for (uint8 x = 0; x <= DiffUnit.X; x++)
-				{
-					const float NewX = StartLoc.X + (GridSettings->GridCellSize * (x * -XDir));
-					NewPoints.AddUnique(FVector(NewX, StartLoc.Y, StartLoc.Z));
-				}
-
-				//Secondary direction
-				const FVector LastAddedPrimary = NewPoints.Last();
-				for (uint8 y = 0; y <= DiffUnit.Y; y++)
-				{
-					const float NewY = LastAddedPrimary.Y + (GridSettings->GridCellSize * (y * -YDir));
-					NewPoints.AddUnique(FVector(LastAddedPrimary.X, NewY, LastAddedPrimary.Z));
-				}
-			}
-			else
-			{
-				//Primary Direction
-				for (uint8 y = 0; y <= DiffUnit.Y; y++)
-				{
-					const float NewY = StartLoc.Y + (GridSettings->GridCellSize * (y * -YDir));
-					NewPoints.AddUnique(FVector(StartLoc.X, NewY, StartLoc.Z));
-				}
-
-				//Secondary Direction
-				const FVector LastAddedPrimary = NewPoints.Last();
-				for (uint8 x = 0; x <= DiffUnit.X; x++)
-				{
-					const float NewX = LastAddedPrimary.X + (GridSettings->GridCellSize * (x * -XDir));
-					NewPoints.AddUnique(FVector(NewX, LastAddedPrimary.Y, LastAddedPrimary.Z));
-				}
+				const float NewX = StartLoc.X + (GridSettings->GridCellSize * (x * -XDir));
+				OutGeneratedPoints.AddUnique(FVector(NewX, StartLoc.Y, StartLoc.Z));
 			}
 
-			return NewPoints;
+			//Secondary direction
+			const FVector LastAddedPrimary = OutGeneratedPoints.Last();
+			for (uint8 y = 0; y <= DiffUnit.Y; y++)
+			{
+				const float NewY = LastAddedPrimary.Y + (GridSettings->GridCellSize * (y * -YDir));
+				OutGeneratedPoints.AddUnique(FVector(LastAddedPrimary.X, NewY, LastAddedPrimary.Z));
+			}
 		}
+		else
+		{
+			//Primary Direction
+			for (uint8 y = 0; y <= DiffUnit.Y; y++)
+			{
+				const float NewY = StartLoc.Y + (GridSettings->GridCellSize * (y * -YDir));
+				OutGeneratedPoints.AddUnique(FVector(StartLoc.X, NewY, StartLoc.Z));
+			}
 
-		return TArray<FVector>();
+			//Secondary Direction
+			const FVector LastAddedPrimary = OutGeneratedPoints.Last();
+			for (uint8 x = 0; x <= DiffUnit.X; x++)
+			{
+				const float NewX = LastAddedPrimary.X + (GridSettings->GridCellSize * (x * -XDir));
+				OutGeneratedPoints.AddUnique(FVector(NewX, LastAddedPrimary.Y, LastAddedPrimary.Z));
+			}
+		}
 	}
 };
