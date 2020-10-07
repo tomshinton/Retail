@@ -7,6 +7,7 @@
 
 #include "RetailPlayer.generated.h"
 
+class UBuildComponent;
 class UCameraComponent;
 class UPlayerMovementComponent;
 class USceneComponent;
@@ -26,6 +27,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = "Movement")
 	UPlayerMovementComponent* PlayerMovementComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = "Building")
+	UBuildComponent* BuildComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	USpringArmComponent* CameraArm;

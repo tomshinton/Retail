@@ -13,6 +13,11 @@
 			"Name": "Movement",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "BuildFramework",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
 		}
 	]
 }

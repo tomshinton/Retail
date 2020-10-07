@@ -15,10 +15,11 @@ public class Retail : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[] 
 		{
+			"BuildFramework",
 			"Core",
 			"CoreUObject",
 			"Engine",
-			"Movement"
+			"Movement",
 		});
 	}
 }
