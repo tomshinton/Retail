@@ -23,5 +23,5 @@ public:
 
 private:
 
-	EBuildPointType GetPointTypeForLocation(const FVector& InLocation) const;
+	EBuildPointType GetPointTypeForIndex(const FIntVector& InLocation) const;
 };

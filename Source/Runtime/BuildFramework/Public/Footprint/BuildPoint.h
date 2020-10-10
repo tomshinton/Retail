@@ -11,6 +11,7 @@ public:
 
 	FVector GetLocation() const { return Location; }
 	FIntVector GetIndex() const { return PointIndex; }
+	EBuildPointType GetType() const { return Type; }
 
 private:
 
