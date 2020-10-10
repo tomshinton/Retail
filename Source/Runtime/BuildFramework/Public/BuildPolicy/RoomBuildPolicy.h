@@ -14,15 +14,15 @@ public:
 	URoomBuildPolicy()
 	{};
 
-	virtual void GeneratePoints(TArray<FVector>& OutGeneratedPoints) const override
+	virtual void GeneratePoints(FBuildFootprint& OutBuildingFootprint) const override
 	{
 		//Primary direction
 		const float YOffset = (DiffUnit.Y * GridSettings->GridCellSize) * -YDir;
 		for (uint8 x = 0; x <= DiffUnit.X; x++)
 		{
 			const float NewX = StartLoc.X + (GridSettings->GridCellSize * (x * -XDir));
-			OutGeneratedPoints.AddUnique(FVector(NewX, StartLoc.Y, StartLoc.Z));
-			OutGeneratedPoints.AddUnique(FVector(NewX, StartLoc.Y + YOffset, StartLoc.Z));
+			OutBuildingFootprint.AddPoint(FVector(NewX, StartLoc.Y, StartLoc.Z), FIntVector(x, 0, 0));
+			OutBuildingFootprint.AddPoint(FVector(NewX, StartLoc.Y + YOffset, StartLoc.Z), FIntVector(x, DiffUnit.Y, 0));
 		}
 
 		//Secondary direction
@@ -30,8 +30,8 @@ public:
 		for (uint8 y = 0; y <= DiffUnit.Y; y++)
 		{
 			const float NewY = StartLoc.Y + (GridSettings->GridCellSize * (y * -YDir));
-			OutGeneratedPoints.AddUnique(FVector(StartLoc.X, NewY, StartLoc.Z));
-			OutGeneratedPoints.AddUnique(FVector(StartLoc.X + XOffset, NewY, StartLoc.Z));
+			OutBuildingFootprint.AddPoint(FVector(StartLoc.X, NewY, StartLoc.Z), FIntVector(0, y, 0));
+			OutBuildingFootprint.AddPoint(FVector(StartLoc.X + XOffset, NewY, StartLoc.Z), FIntVector(DiffUnit.X, y, 0));
 		}
 	}
 };
