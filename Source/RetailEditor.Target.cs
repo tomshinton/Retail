@@ -9,6 +9,14 @@ public class RetailEditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 
-		ExtraModuleNames.AddRange( new string[] { "Retail" } );
-	}
+		ExtraModuleNames.AddRange( new string[] 
+		{ 
+			"Retail",
+		});
+
+        ExtraModuleNames.AddRange(new string[]
+		{
+            "BuildFrameworkTests",
+	}	);
+    }
 }

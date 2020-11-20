@@ -3,9 +3,9 @@
 #include "BuildPointType.generated.h"
 
 UENUM()
-enum class EBuildPointType : uint8 
+enum class EBuildPointType : uint8
 {
 	Corner,
 	Straight,
-	INVALID
+	INVALID UMETA(Hidden)
 };

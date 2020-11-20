@@ -1,6 +1,8 @@
 #include "Runtime/BuildFramework/Public/BuildPolicy/BuildPolicyBase.h"
 #include "Runtime/BuildFramework/Public/Footprint/BuildPoint.h"
 
+#include "Runtime/BuildFramework/Public/Ghost/Ghost.h"
+
 UBuildPolicyBase::UBuildPolicyBase() 
 	: StartLoc(FVector::ZeroVector)
 	, CurrLoc(FVector::ZeroVector)
@@ -12,12 +14,16 @@ UBuildPolicyBase::UBuildPolicyBase()
 	, GridCellSize(GridSettings->GridCellSize)
 	, XDir(0)
 	, YDir(0)
+	, Ghost(nullptr)
 {
 
 }
 
-void UBuildPolicyBase::Start()
+void UBuildPolicyBase::Start(AGhost& InGhost, const UBuildInfo& InBuildInfo)
 {
+	BuildInfo = &InBuildInfo;
+	Ghost = &InGhost;
+
 	if (IGridProjectionInterface* Interface = IGridProjectionInterface::Get(*this))
 	{
 		ProjectionInterface = *Interface;
@@ -30,7 +36,7 @@ void UBuildPolicyBase::Start()
 		StartLoc = Interface->GetRoundedPositionUnderMouse();
 		CurrLoc = StartLoc;
 
-		GeneratePoints(GeneratedFootprint);
+		OnRoundedPositionChanged(StartLoc);
 	}
 }
 
@@ -42,9 +48,14 @@ void UBuildPolicyBase::End()
 	}
 }
 
+const FBuildFootprint* UBuildPolicyBase::GetFootprint()
+{
+	return &GeneratedFootprint;
+}
+
 void UBuildPolicyBase::OnRoundedPositionChanged(const FVector& InNewLocation)
 {
-	GeneratedFootprint.Reset();
+	GeneratedFootprint.Reset(BuildInfo);
 
 	CurrLoc = InNewLocation;
 
@@ -58,6 +69,7 @@ void UBuildPolicyBase::OnRoundedPositionChanged(const FVector& InNewLocation)
 	YDir = FMath::Sign(Diff.Y);
 
 	GeneratePoints(GeneratedFootprint);
+	Ghost->UpdateFootprint(GeneratedFootprint);
 
 #if !UE_BUILD_SHIPPING
 	if (DrawBuildPolicyPoints.GetValueOnAnyThread())

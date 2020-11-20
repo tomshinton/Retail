@@ -20,6 +20,7 @@ public class Retail : ModuleRules
 			"CoreUObject",
 			"Engine",
 			"Movement",
+			"ObjectMessaging"
 		});
 	}
 }

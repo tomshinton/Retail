@@ -13,6 +13,7 @@ public class BuildFramework : ModuleRules
             "Engine",
             "CoreUObject",
 			"InputCore",
+			"ObjectMessaging"
         });
 		
 		PublicIncludePaths.AddRange(new string[] {"Runtime/BuildFramework/Public"});

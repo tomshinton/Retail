@@ -5,12 +5,15 @@
 #include "Runtime/BuildFramework/Public/BuildInterface.h"
 
 #include <Runtime/CoreUObject/Public/Serialization/AsyncLoader.h>
+#include <Runtime/CoreUObject/Public/UObject/WeakInterfacePtr.h>
 
 #include "BuildComponent.generated.h"
 
+class AGhost;
 class UBuildInfo;
 class UBuildPolicyBase;
 class APlayerController;
+class IObjectMessagingListenerInterface;
 
 UCLASS(MinimalAPI)
 class UBuildComponent : public UActorComponent
@@ -48,4 +51,7 @@ private:
 	TUniquePtr<FAsyncLoader> AsyncLoader;
 
 	TWeakObjectPtr<APlayerController> WeakController;
+
+	UPROPERTY()
+	AGhost* Ghost;
 };

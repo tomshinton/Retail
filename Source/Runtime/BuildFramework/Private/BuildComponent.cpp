@@ -1,7 +1,9 @@
 #include "Runtime/BuildFramework/Public/BuildComponent.h"
 #include "Runtime/BuildFramework/Public/BuildInfo/BuildInfo.h"
 #include "Runtime/BuildFramework/Public/BuildPolicy/BuildPolicyBase.h"
+#include "Runtime/BuildFramework/Public/Ghost/Ghost.h"
 
+#include <Runtime/Engine/Classes/GameFramework/GameStateBase.h>
 #include <Runtime/Engine/Classes/GameFramework/PlayerController.h>
 
 DEFINE_LOG_CATEGORY_STATIC(BuildComponentLog, Log, All);
@@ -31,6 +33,11 @@ void UBuildComponent::BeginPlay()
 		if (!WeakController.IsValid())
 		{
 			UE_LOG(BuildComponentLog, Error, TEXT("Could not source local player controller"));
+		}
+
+		if (AGhost* SpawnedGhost = World->SpawnActor<AGhost>(AGhost::StaticClass(), FTransform::Identity))
+		{
+			Ghost = SpawnedGhost;
 		}
 	}
 }
@@ -66,7 +73,7 @@ void UBuildComponent::StartBuild()
 		{
 			UE_LOG(BuildComponentLog, Log, TEXT("Starting build using policy %s"), *IdealPolicy->GetName());
 			CurrentBuildPolicy = IdealPolicy;
-			IdealPolicy->Start();
+			IdealPolicy->Start(*Ghost, *CurrentBuildInfo);
 		}
 		else
 		{

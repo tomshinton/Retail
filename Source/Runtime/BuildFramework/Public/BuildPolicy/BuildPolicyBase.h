@@ -15,6 +15,8 @@ static TAutoConsoleVariable<int32> DrawBuildPolicyPoints(TEXT("BuildPolicy.DrawP
 
 #include "BuildPolicyBase.generated.h"
 
+class AGhost;
+
 UCLASS(abstract, editinlinenew, hidedropdown)
 class UBuildPolicyBase : public UObject 
 {
@@ -24,9 +26,11 @@ public:
 
 	UBuildPolicyBase();
 
-	void Start();
+	void Start(AGhost& InGhost, const UBuildInfo& InBuildInfo);
 	void End();
 
+	const FBuildFootprint* GetFootprint();
+	
 protected:
 
 	virtual void GeneratePoints(FBuildFootprint& OutBuildFootprint) const PURE_VIRTUAL(UBuildPolicyBase::GeneratePoints, );
@@ -52,4 +56,10 @@ protected:
 private:
 
 	void OnRoundedPositionChanged(const FVector& InNewLocation);
+
+	UPROPERTY()
+	AGhost* Ghost;
+
+	UPROPERTY()
+	const UBuildInfo* BuildInfo;
 };
