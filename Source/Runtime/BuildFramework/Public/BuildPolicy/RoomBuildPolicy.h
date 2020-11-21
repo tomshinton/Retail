@@ -30,8 +30,8 @@ public:
 		for (uint8 y = 0; y <= DiffUnit.Y; y++)
 		{
 			const float NewY = StartLoc.Y + (GridSettings->GridCellSize * (y * -YDir));
-			OutBuildingFootprint.AddPoint(FVector(StartLoc.X, NewY, StartLoc.Z), FIntVector(0, y, 0));
-			OutBuildingFootprint.AddPoint(FVector(StartLoc.X + XOffset, NewY, StartLoc.Z), FIntVector(DiffUnit.X, y, 0));
+			OutBuildingFootprint.AddPoint(FVector(StartLoc.X, NewY, StartLoc.Z), -90.f, FIntVector(0, y, 0));
+			OutBuildingFootprint.AddPoint(FVector(StartLoc.X + XOffset, NewY, StartLoc.Z), -90.f, FIntVector(DiffUnit.X, y, 0));
 		}
 	}
 };

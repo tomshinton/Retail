@@ -7,12 +7,12 @@ class FBuildPoint
 
 public:
 
-	FBuildPoint(const FVector& InLocation, const FIntVector& InPointIndex, const EBuildPointType InType);
+	FBuildPoint(const FVector& InLocation, const FRotator& InRotation, const FIntVector& InPointIndex, const EBuildPointType InType);
 
 	FVector GetLocation() const { return Location; }
 	FTransform GetTransform() const 
 	{
-		return FTransform(FRotator::ZeroRotator, GetLocation(), FVector(1.f, 1.f, 1.f));
+		return FTransform(Rotation, GetLocation(), FVector(1.f, 1.f, 1.f));
 	};
 
 	FIntVector GetIndex() const { return PointIndex; }
@@ -31,6 +31,7 @@ public:
 private:
 
 	FVector Location;
+	FRotator Rotation;
 
 	//How does this point compare to it's parent extent?
 	FIntVector PointIndex;

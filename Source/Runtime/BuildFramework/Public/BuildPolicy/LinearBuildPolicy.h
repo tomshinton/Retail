@@ -30,7 +30,7 @@ public:
 			for (uint8 y = 0; y <= DiffUnit.Y; y++)
 			{
 				const float NewY = LastAddedPrimary.Y + (GridSettings->GridCellSize * (y * -YDir));
-				OutBuildingFootprint.AddPoint(FVector(LastAddedPrimary.X, NewY, LastAddedPrimary.Z), FIntVector(DiffUnit.X, y, 0));
+				OutBuildingFootprint.AddPoint(FVector(LastAddedPrimary.X, NewY, LastAddedPrimary.Z), -90.f, FIntVector(DiffUnit.X, y, 0));
 			}
 		}
 		else
@@ -39,7 +39,7 @@ public:
 			for (uint8 y = 0; y <= DiffUnit.Y; y++)
 			{
 				const float NewY = StartLoc.Y + (GridSettings->GridCellSize * (y * -YDir));
-				OutBuildingFootprint.AddPoint(FVector(StartLoc.X, NewY, StartLoc.Z), FIntVector(0, y, 0));
+				OutBuildingFootprint.AddPoint(FVector(StartLoc.X, NewY, StartLoc.Z), -90.f, FIntVector(0, y, 0));
 			}
 
 			//Secondary Direction

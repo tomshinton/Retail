@@ -31,12 +31,12 @@ void FBuildFootprint::Reset(const UBuildInfo* InBuildInfo)
 
 void FBuildFootprint::AddPoint(const FVector& InLocation, const FIntVector& InPointIndex)
 {
-	if (Extent.Z != 0)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 1, FColor::White, FString::Printf(TEXT("Extent: %s"), *Extent.ToString()));
-	}
+	AddPoint(InLocation, 0.f, InPointIndex);
+}
 
-	Points.AddUnique(FBuildPoint(InLocation, InPointIndex, GetPointTypeForIndex(InPointIndex)));
+void FBuildFootprint::AddPoint(const FVector& InLocation, const float InYaw, const FIntVector& InPointIndex)
+{
+	Points.AddUnique(FBuildPoint(InLocation, FRotator(0.f, InYaw, 0.f), InPointIndex, GetPointTypeForIndex(InPointIndex)));
 }
 
 FVector FBuildFootprint::Last() const

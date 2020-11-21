@@ -15,6 +15,8 @@ public:
 	void Reset(const UBuildInfo* InBuildInfo);
 
 	void AddPoint(const FVector& InLocation, const FIntVector& InPointIndex);
+	void AddPoint(const FVector& InLocation, const float InYaw, const FIntVector& InPointIndex);
+
 	FVector Last() const;
 
 	FIntVector Extent;
