@@ -68,7 +68,12 @@ void UBuildPolicyBase::OnRoundedPositionChanged(const FVector& InNewLocation)
 	XDir = FMath::Sign(Diff.X);
 	YDir = FMath::Sign(Diff.Y);
 
+	GeneratedFootprint.XDir = XDir;
+	GeneratedFootprint.YDir = YDir;
+
 	GeneratePoints(GeneratedFootprint);
+	GeneratedFootprint.TryAlignCornerBridges();
+
 	Ghost->UpdateFootprint(GeneratedFootprint);
 
 #if !UE_BUILD_SHIPPING

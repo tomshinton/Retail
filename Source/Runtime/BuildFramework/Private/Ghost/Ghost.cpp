@@ -38,12 +38,15 @@ void AGhost::Reset()
 
 void AGhost::Rebuild(const FBuildFootprint& InFootprint)
 {
-	for (const FBuildPoint& Point : InFootprint.Points)
+	for (const TPair<EBuildPointType, FBuildPointBucket> Bucket : InFootprint.PointBuckets)
 	{
-		if(UStaticMesh* Mesh = const_cast<UStaticMesh*>(InFootprint.SourceBuildInfo->GetMeshForPoint(Point.GetType())))
+		for (const FBuildPoint& Point : Bucket.Value.Points)
 		{
-			UHierarchicalInstancedStaticMeshComponent& HIMesh = GetComponentForMesh(*Mesh);
-			HIMesh.AddInstance(Point.GetTransform());
+			if (UStaticMesh* Mesh = const_cast<UStaticMesh*>(InFootprint.SourceBuildInfo->GetMeshForPoint(Point.GetType())))
+			{
+				UHierarchicalInstancedStaticMeshComponent& HIMesh = GetComponentForMesh(*Mesh);
+				HIMesh.AddInstance(Point.GetTransform());
+			}
 		}
 	}
 }

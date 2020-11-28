@@ -7,12 +7,17 @@ class FBuildPoint
 
 public:
 
+	FBuildPoint();
 	FBuildPoint(const FVector& InLocation, const FRotator& InRotation, const FIntVector& InPointIndex, const EBuildPointType InType);
 
 	FVector GetLocation() const { return Location; }
+	FRotator GetRotation() const { return Rotation; }
+
+	void SetRotation(const FRotator& InRotator) { Rotation = InRotator; }
+	
 	FTransform GetTransform() const 
 	{
-		return FTransform(Rotation, GetLocation(), FVector(1.f, 1.f, 1.f));
+		return FTransform(Rotation, Location, FVector(1.f, 1.f, 1.f));
 	};
 
 	FIntVector GetIndex() const { return PointIndex; }

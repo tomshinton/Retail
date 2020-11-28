@@ -5,6 +5,26 @@
 
 class UBuildInfo;
 
+struct FBuildPointBucket
+{
+	FBuildPointBucket()
+		: Points()
+	{};
+
+	FBuildPointBucket(const FBuildPoint& InSeedPoint)
+		: Points()
+	{
+		Points.Add(InSeedPoint);
+	};
+
+	void Add(const FBuildPoint& InPoint)
+	{
+		Points.AddUnique(InPoint);
+	}
+
+	TArray<FBuildPoint> Points;
+};
+
 class FBuildFootprint
 {
 public:
@@ -20,13 +40,18 @@ public:
 	FVector Last() const;
 
 	FIntVector Extent;
-	TArray<FBuildPoint> Points;
+	TMap<EBuildPointType, FBuildPointBucket> PointBuckets;
+	FBuildPoint LastBuildPoint;
+
+	int8 XDir;
+	int8 YDir;
 
 #if !UE_BUILD_SHIPPING
 	void Visualise(const UWorld& InWorld, const float InGridSize);
 #endif //!UE_BUILD_SHIPPING
 
 	BUILDFRAMEWORK_API EBuildPointType GetPointTypeForIndex(const FIntVector& InLocation) const;
+	void TryAlignCornerBridges();
 
 	UPROPERTY(Transient)
 	const UBuildInfo* SourceBuildInfo;
