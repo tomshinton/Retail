@@ -19,14 +19,21 @@ class UBuildInfo : public UDataAsset
 public:
 
 	UBuildInfo()
+		: PrimaryBuildPolicy(nullptr)
+		, AlternativePolicies()
+		, ClearBuildActionOnceComplete(true)
+		, RenderSet(nullptr)
 	{
 	};
 
-	UPROPERTY(Instanced, EditDefaultsOnly)
+	UPROPERTY(Instanced, EditDefaultsOnly, Category = "Construction")
 	UBuildPolicyBase* PrimaryBuildPolicy;
 
-	UPROPERTY(Instanced, EditDefaultsOnly)
+	UPROPERTY(Instanced, EditDefaultsOnly, Category = "Construction")
 	TMap<FKey, UBuildPolicyBase*> AlternativePolicies;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Construction")
+	bool ClearBuildActionOnceComplete;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Rendering")
 	UBuildingRenderSet* RenderSet;

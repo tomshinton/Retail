@@ -20,10 +20,10 @@ public:
 	AGhost(const FObjectInitializer& ObjectInitializer);
 
 	void UpdateFootprint(const FBuildFootprint& InFootprint);
+	void Reset();
 
 private:
 
-	void Reset();
 	void Rebuild(const FBuildFootprint& InFootprint);
 
 	UHierarchicalInstancedStaticMeshComponent& GetComponentForMesh(UStaticMesh& InMesh);

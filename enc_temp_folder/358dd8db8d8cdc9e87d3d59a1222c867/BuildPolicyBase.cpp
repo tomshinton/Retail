@@ -46,8 +46,6 @@ void UBuildPolicyBase::End()
 	{
 		ProjectionInterface->GetOnRoundedPositionChanged().RemoveAll(this);
 	}
-
-	Ghost->Reset();
 }
 
 void UBuildPolicyBase::Cancel()

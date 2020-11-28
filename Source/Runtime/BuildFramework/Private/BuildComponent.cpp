@@ -11,6 +11,7 @@ DEFINE_LOG_CATEGORY_STATIC(BuildComponentLog, Log, All);
 namespace BuildComponentBindings
 {
 	const FName Build = TEXT("Build");
+	const FName CancelBuild = TEXT("CancelBuild");
 }
 
 UBuildComponent::UBuildComponent(const FObjectInitializer& ObjectInitialiser)
@@ -46,6 +47,8 @@ void UBuildComponent::SetupComponentInputBindings(UInputComponent& PlayerInputCo
 {
 	PlayerInputComponent.BindAction(BuildComponentBindings::Build, IE_Pressed, this, &UBuildComponent::StartBuild);
 	PlayerInputComponent.BindAction(BuildComponentBindings::Build, IE_Released, this, &UBuildComponent::EndBuild);
+
+	PlayerInputComponent.BindAction(BuildComponentBindings::CancelBuild, IE_Pressed, this, &UBuildComponent::CancelBuild);
 }
 
 void UBuildComponent::StartBuildFromClass(const FSoftObjectPath& InClass)
@@ -88,12 +91,31 @@ void UBuildComponent::EndBuild()
 	{
 		UE_LOG(BuildComponentLog, Log, TEXT("Ending %s's using policy %s"), *CurrentBuildInfo->GetName(), *CurrentBuildPolicy->GetName());
 		CurrentBuildPolicy->End();
+
+		if (CurrentBuildInfo->ClearBuildActionOnceComplete)
+		{
+			CurrentBuildPolicy = nullptr;
+			CurrentBuildInfo = nullptr;
+		}
 	}
 }
 
 void UBuildComponent::CancelBuild()
 {
+	if (CurrentBuildPolicy == nullptr && CurrentBuildInfo != nullptr)
+	{
+		UE_LOG(BuildComponentLog, Log, TEXT("Ending %s's build - build not currently active so no ghost to cleanup"), *CurrentBuildInfo->GetName());
 
+		//we're not actively building
+		CurrentBuildInfo = nullptr;
+	}
+	else if (CurrentBuildPolicy != nullptr)
+	{
+		UE_LOG(BuildComponentLog, Log, TEXT("Cancelling %s's using policy %s"), *CurrentBuildInfo->GetName(), *CurrentBuildPolicy->GetName());
+
+		CurrentBuildPolicy->Cancel();
+		CurrentBuildPolicy = nullptr;
+	}
 }
 
 UBuildPolicyBase* UBuildComponent::GetPolicy()

@@ -28,6 +28,7 @@ public:
 
 	void Start(AGhost& InGhost, const UBuildInfo& InBuildInfo);
 	void End();
+	void Cancel();
 
 	const FBuildFootprint* GetFootprint();
 	
