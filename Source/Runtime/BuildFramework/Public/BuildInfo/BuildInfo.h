@@ -23,6 +23,10 @@ public:
 		, AlternativePolicies()
 		, ClearBuildActionOnceComplete(true)
 		, RenderSet(nullptr)
+		, BuildingActorClass(nullptr)
+#if WITH_EDITORONLY_DATA
+		, FolderPath("Buildings")
+#endif //WITH_EDITORONLY_DATA
 	{
 	};
 
@@ -37,6 +41,14 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Rendering")
 	UBuildingRenderSet* RenderSet;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
+	TSubclassOf<AActor> BuildingActorClass;
+
+#if WITH_EDITORONLY_DATA
+	UPROPERTY(EditDefaultsOnly, Category = "Editor | Organisation")
+	FString FolderPath;
+#endif //WITH_EDITORONLY_DATA
 
 	const UStaticMesh* GetMeshForPoint(const EBuildPointType InBuildPoint) const
 	{

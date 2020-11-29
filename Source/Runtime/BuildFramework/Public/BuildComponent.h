@@ -10,10 +10,12 @@
 #include "BuildComponent.generated.h"
 
 class AGhost;
-class UBuildInfo;
-class UBuildPolicyBase;
 class APlayerController;
 class IObjectMessagingListenerInterface;
+class UBuildInfo;
+class UBuildPolicyBase;
+
+struct FBuildPointBucket;
 
 UCLASS(MinimalAPI)
 class UBuildComponent : public UActorComponent

@@ -23,6 +23,11 @@
       "Name": "BuildFrameworkTests",
       "Type": "Developer",
       "LoadingPhase": "Default"
+    },
+    {
+      "Name": "Structure",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
     }
   ]
 }

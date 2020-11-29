@@ -15,6 +15,7 @@ public class Retail : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[] 
 		{
+"Structure",
 			"BuildFramework",
 			"Core",
 			"CoreUObject",

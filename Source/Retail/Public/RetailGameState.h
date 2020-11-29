@@ -28,5 +28,7 @@ public:
 
 private:
 
+	void InitialiseStructureManager(UObject& InManager);
+
 	FObjectMessagingListener Listener;
 };

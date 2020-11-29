@@ -1,29 +1,10 @@
 #pragma once
 
 #include "Runtime/BuildFramework/Public/Footprint/BuildPoint.h"
+#include "Runtime/BuildFramework/Public/Footprint/BuildPointBucket.h"
 #include "Runtime/BuildFramework/Public/Footprint/BuildPointType.h"
 
 class UBuildInfo;
-
-struct FBuildPointBucket
-{
-	FBuildPointBucket()
-		: Points()
-	{};
-
-	FBuildPointBucket(const FBuildPoint& InSeedPoint)
-		: Points()
-	{
-		Points.Add(InSeedPoint);
-	};
-
-	void Add(const FBuildPoint& InPoint)
-	{
-		Points.AddUnique(InPoint);
-	}
-
-	TArray<FBuildPoint> Points;
-};
 
 class FBuildFootprint
 {

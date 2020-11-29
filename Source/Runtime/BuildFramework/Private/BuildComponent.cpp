@@ -1,8 +1,10 @@
 #include "Runtime/BuildFramework/Public/BuildComponent.h"
 #include "Runtime/BuildFramework/Public/BuildInfo/BuildInfo.h"
 #include "Runtime/BuildFramework/Public/BuildPolicy/BuildPolicyBase.h"
+#include "Runtime/BuildFramework/Public/Events/BuildComponentEvents.h"
 #include "Runtime/BuildFramework/Public/Ghost/Ghost.h"
 
+#include <ObjectMessaging/Public/Sender/ObjectMessagingFunctions.h>
 #include <Runtime/Engine/Classes/GameFramework/GameStateBase.h>
 #include <Runtime/Engine/Classes/GameFramework/PlayerController.h>
 
@@ -90,6 +92,12 @@ void UBuildComponent::EndBuild()
 	if (CurrentBuildInfo != nullptr && CurrentBuildPolicy != nullptr)
 	{
 		UE_LOG(BuildComponentLog, Log, TEXT("Ending %s's using policy %s"), *CurrentBuildInfo->GetName(), *CurrentBuildPolicy->GetName());
+
+		if (UWorld* World = GetWorld())
+		{
+			ObjectMessagingFunctions::SendMessage<FOnBuildEnded>(*World->GetGameState(), FOnBuildEnded(*CurrentBuildPolicy->GetFootprint()));
+		}
+
 		CurrentBuildPolicy->End();
 
 		if (CurrentBuildInfo->ClearBuildActionOnceComplete)

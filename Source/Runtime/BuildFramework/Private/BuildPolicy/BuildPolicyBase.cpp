@@ -47,11 +47,17 @@ void UBuildPolicyBase::End()
 		ProjectionInterface->GetOnRoundedPositionChanged().RemoveAll(this);
 	}
 
+	GeneratedFootprint.Reset(BuildInfo);
 	Ghost->Reset();
 }
 
 void UBuildPolicyBase::Cancel()
 {
+	if (ProjectionInterface.IsValid())
+	{
+		ProjectionInterface->GetOnRoundedPositionChanged().RemoveAll(this);
+	}
+
 	GeneratedFootprint.Reset(BuildInfo);
 	Ghost->Reset();
 }
